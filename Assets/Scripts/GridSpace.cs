@@ -4,8 +4,19 @@ using TMPro;
 
 public class GridSpace : MonoBehaviour
 {
+    string[] map = {
+        "a", "b", "c",
+        "d", "e", "f",
+        "g", "h", "i",
+        "j", "k", "l",
+        "m", "n", "o",
+        "p", "q", "r",
+        "s", "t", "u",
+        "v", "w", "x",
+        "y", "z"
+    };
+
     [SerializeField] private RectTransform m_grid;
-    // [SerializeField] private Image m_image;
     [SerializeField] private TextMeshProUGUI m_label;
 
     public void ToggleGrid()
@@ -15,12 +26,6 @@ public class GridSpace : MonoBehaviour
 
     public void SetLabel(int row, int column)
     {
-        m_label.SetText("");
+        m_label.SetText(map[row].ToUpper() + "," + column.ToString());
     }
-
-    // public void SetImage(string url)
-    // {
-    //     // download image from url in coroutine
-    //     // set m_image source to downloaded image
-    // }
 }

@@ -1,35 +1,24 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
-
-string[] map = {
-    "a", "b", "c",
-    "d", "e", "f",
-    "g", "h", "i"
-};
 
 public class Overlay : MonoBehaviour
 {
-    private GridLayoutGroup m_layout;
+    private GridLayoutGroup m_gridLayout;
+
+    [SerializeField] private Transform m_grid;
+    [SerializeField] private Transform m_images;
 
     [SerializeField] private GridSpace m_gridSpacePrefab;
 
-    private static Overlay _instance;
-    public static Overlay Instance;
+    private float spaceWidth;
+    private float spaceHeight;
 
     private void Awake()
     {
-        if (_instance != null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            _instance = this;
-            m_layout = GetComponent<GridLayoutGroup>();
-        }
+        m_gridLayout = m_grid.GetComponent<GridLayoutGroup>();
     }
 
     public void Create(int rows, int columns, IntPtr handle)
@@ -48,19 +37,61 @@ public class Overlay : MonoBehaviour
         float width = (info.info.rcClient.Right - info.info.rcClient.Left) * scale;
         float height = (info.info.rcClient.Bottom - info.info.rcClient.Top) * scale;
 
+        spaceWidth = width / columns;
+        spaceHeight = height / rows;
+
         RectTransform r = GetComponent<RectTransform>();
         r.sizeDelta = new Vector2(width, height);
         r.anchoredPosition = new Vector3(x, -y, 0);
 
-        // UnityEngine.Debug.Log($"{handle}: {info.name} - ({info.info.rcClient.Left}, {info.info.rcClient.Top}), ({info.info.rcClient.Right}, {info.info.rcClient.Bottom}), ({w}, {h})");
+        m_gridLayout.constraintCount = columns;
+        m_gridLayout.cellSize = new Vector2(spaceWidth, spaceHeight);
 
-        m_layout.constraintCount = columns;
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < columns; j++)
             {
-                GridSpace grid = Instantiate(m_gridSpacePrefab, transform);
+                GridSpace grid = Instantiate(m_gridSpacePrefab, m_grid);
+                grid.SetLabel(i, j);
             }
+        }
+    }
+
+    public void AddImage(int startRow, int startCol, string url, int endRow = -1, int endCol = -1)
+    {
+        if (endRow == -1) endRow = startRow;
+        if (endCol == -1) endCol = startCol;
+
+        GameObject o = new GameObject(url);
+        o.transform.SetParent(m_images);
+
+        RectTransform t = o.AddComponent<RectTransform>();
+        t.anchorMin = new Vector2(0, 1);
+        t.anchorMax = new Vector2(0, 1);
+        t.sizeDelta = new Vector2((endCol - startCol + 1) * spaceWidth, (endRow - startRow + 1) * spaceHeight);
+        t.anchoredPosition = new Vector2(
+            startCol * spaceWidth + spaceWidth / 2 + ((endCol - startCol) * spaceWidth) / 2,
+            -startRow * spaceHeight - spaceHeight / 2 - ((endRow - startRow) * spaceHeight) / 2
+            );
+        t.localScale = Vector3.one;
+        // t.pivot = new Vector2(0, 1);
+
+        RawImage i = o.AddComponent<RawImage>();
+        StartCoroutine(DownloadImage(url, i));
+    }
+
+    IEnumerator DownloadImage(string MediaUrl, RawImage i)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.Log(request.error);
+        }
+        else
+        {
+            Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            i.texture = texture;
         }
     }
 }

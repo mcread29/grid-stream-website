@@ -1,18 +1,28 @@
+using System.IO;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CreateScreen : MonoBehaviour
 {
     [SerializeField] private Slider m_columns;
     [SerializeField] private Slider m_rows;
     [SerializeField] private Dropdown m_window;
+    [SerializeField] private TMP_InputField m_username;
+    [SerializeField] private TMP_InputField m_password;
+    [SerializeField] private TextMeshProUGUI m_errorText;
 
     private void Awake()
     {
         SetOptions();
+    }
+
+    private void OnEnable()
+    {
+        m_errorText.SetText("");
     }
 
     public void SetOptions()
@@ -34,12 +44,12 @@ public class CreateScreen : MonoBehaviour
     {
         if (m_columns.value < 1)
         {
-            // error
+            m_errorText.SetText("Columns must be greater than 0");
             return;
         }
         if (m_rows.value < 1)
         {
-            // error
+            m_errorText.SetText("Rows must be greater than 0");
             return;
         }
 
@@ -57,10 +67,22 @@ public class CreateScreen : MonoBehaviour
 
         if (selected == IntPtr.Zero)
         {
-            // error
+            m_errorText.SetText("Invalid window");
             return;
         }
 
-        Manager.Instance.CreateOverlay((int)m_rows.value, (int)m_columns.value, selected);
+        if (m_username.text.Length < 1)
+        {
+            m_errorText.SetText("Username cannot be empty");
+            return;
+        }
+
+        if (m_password.text.Length < 1)
+        {
+            m_errorText.SetText("Password cannot be empty");
+            return;
+        }
+
+        Manager.Instance.TryCreateOverlay((int)m_rows.value, (int)m_columns.value, selected, m_username.text, m_password.text);
     }
 }

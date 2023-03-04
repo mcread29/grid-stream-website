@@ -55,6 +55,7 @@ public class TransparentWindow : MonoBehaviour
     private IntPtr hWnd;
 
     [SerializeField] private GameObject m_menu;
+    [SerializeField] private GameObject m_grid;
     // [SerializeField] private RectTransform m_gr
     // [SerializeField] private GameObject m_grid;
 
@@ -108,33 +109,6 @@ public class TransparentWindow : MonoBehaviour
 
     private void Start()
     {
-        //         RectTransform c = GetComponentInParent<Canvas>().gameObject.GetComponent<RectTransform>();
-
-        //         int w = Screen.currentResolution.width;
-        //         int h = Screen.currentResolution.height;
-
-        //         float scale = c.sizeDelta.y / h;
-
-        //         foreach (KeyValuePair<IntPtr, WindowInfo> window in OpenWindowGetter.GetOpenWindows())
-        //         {
-        //             IntPtr handle = window.Key;
-        //             WindowInfo info = window.Value;
-
-        //             if (info.name == "Untitled - Notepad")
-        //             {
-        //                 float x = info.info.rcClient.Left * scale;
-        //                 float y = info.info.rcClient.Top * scale;
-        //                 float width = (info.info.rcClient.Right - info.info.rcClient.Left) * scale;
-        //                 float height = (info.info.rcClient.Bottom - info.info.rcClient.Top) * scale;
-
-        //                 RectTransform r = m_grid.GetComponent<RectTransform>();
-        //                 r.sizeDelta = new Vector2(width, height);
-        //                 r.anchoredPosition = new Vector3(x, -y, 0);
-
-        //                 UnityEngine.Debug.Log($"{handle}: {info.name} - ({info.info.rcClient.Left}, {info.info.rcClient.Top}), ({info.info.rcClient.Right}, {info.info.rcClient.Bottom}), ({w}, {h})");
-        //             }
-        //         }
-
 #if !UNITY_EDITOR
                 hWnd = GetActiveWindow();
 
@@ -142,7 +116,6 @@ public class TransparentWindow : MonoBehaviour
                 DwmExtendFrameIntoClientArea(hWnd, ref margins);
 
                 SetWindowLong(hWnd, GWL_EXSTYLE, WS_EX_LAYERED | WS_EX_TRANSPARENT);
-                //SetLayeredWindowAttributes(hWnd, 0, 0, LWA_COLORKEY);
 
                 SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, 0);
 #endif
@@ -168,11 +141,13 @@ public class TransparentWindow : MonoBehaviour
     {
         SetClickthrough(false);
         m_menu.gameObject.SetActive(true);
+        m_grid.gameObject.SetActive(true);
     }
 
     public void Hide()
     {
         SetClickthrough(true);
         m_menu.gameObject.SetActive(false);
+        m_grid.gameObject.SetActive(false);
     }
 }

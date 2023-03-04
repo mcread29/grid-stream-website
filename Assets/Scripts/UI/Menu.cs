@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
-    [SerializeField] private GameObject m_createScreen;
-    [SerializeField] private GameObject m_overlayActive;
+    [SerializeField] private CreateScreen m_createScreen;
+    [SerializeField] private OverlayActive m_overlayActive;
 
     private void Awake()
     {
@@ -27,13 +27,13 @@ public class Menu : MonoBehaviour
 
     public void ShowCreate()
     {
-        m_createScreen.SetActive(true);
-        m_overlayActive.SetActive(false);
+        m_createScreen.gameObject.SetActive(true);
+        m_overlayActive.gameObject.SetActive(false);
     }
 
     public void ShowOverlayActive()
     {
-        m_createScreen.SetActive(false);
-        m_overlayActive.SetActive(true);
+        m_createScreen.gameObject.SetActive(false);
+        m_overlayActive.gameObject.SetActive(true);
     }
 }
