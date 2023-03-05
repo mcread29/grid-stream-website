@@ -56,8 +56,6 @@ public class TransparentWindow : MonoBehaviour
 
     [SerializeField] private GameObject m_menu;
     [SerializeField] private GameObject m_grid;
-    // [SerializeField] private RectTransform m_gr
-    // [SerializeField] private GameObject m_grid;
 
     private void OnEnable()
     {
@@ -140,14 +138,16 @@ public class TransparentWindow : MonoBehaviour
     public void Show()
     {
         SetClickthrough(false);
-        m_menu.gameObject.SetActive(true);
-        m_grid.gameObject.SetActive(true);
+        Manager.Instance.ShowUI();
+        // m_menu.gameObject.SetActive(true);
+        // m_grid.gameObject.SetActive(true);
     }
 
     public void Hide()
     {
         SetClickthrough(true);
-        m_menu.gameObject.SetActive(false);
-        m_grid.gameObject.SetActive(false);
+        Manager.Instance.HideUI();
+        // m_menu.gameObject.SetActive(false);
+        // m_grid.gameObject.SetActive(false);
     }
 }

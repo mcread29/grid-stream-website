@@ -24,6 +24,7 @@ struct AddImageData
 public class Manager : MonoBehaviour
 {
     [SerializeField] private Menu m_menu;
+    [SerializeField] private GameObject m_grid;
     [SerializeField] private Overlay m_overlay;
 
     private SocketIOClient io;
@@ -92,5 +93,25 @@ public class Manager : MonoBehaviour
     private void addImage(AddImageData data)
     {
         m_overlay.AddImage(data.startRow, data.startCol, data.url, data.endRow, data.endCol);
+    }
+
+    public void ShowUI()
+    {
+        m_menu.gameObject.SetActive(true);
+    }
+
+    public void ShowGrid()
+    {
+        m_grid.gameObject.SetActive(true);
+    }
+
+    public void HideUI()
+    {
+        m_menu.gameObject.SetActive(false);
+    }
+
+    public void HideGrid()
+    {
+        m_grid.gameObject.SetActive(false);
     }
 }

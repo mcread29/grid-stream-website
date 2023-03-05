@@ -16,4 +16,10 @@ public class OverlayActive : MonoBehaviour
     {
         Manager.Password.CopyToClipboard();
     }
+
+    public void ShowGrid(bool show)
+    {
+        if (show) Manager.Instance.ShowGrid();
+        else Manager.Instance.HideGrid();
+    }
 }
