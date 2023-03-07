@@ -22,4 +22,10 @@ public class OverlayActive : MonoBehaviour
         if (show) Manager.Instance.ShowGrid();
         else Manager.Instance.HideGrid();
     }
+
+    public void ShowImages(bool show)
+    {
+        if (show) Manager.Instance.ShowImages();
+        else Manager.Instance.HideImages();
+    }
 }

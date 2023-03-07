@@ -57,6 +57,14 @@ public class Overlay : MonoBehaviour
         }
     }
 
+    public void ClearImages()
+    {
+        foreach (Transform child in m_images)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     public void AddImage(int startRow, int startCol, string url, int endRow = -1, int endCol = -1)
     {
         if (endRow == -1) endRow = startRow;

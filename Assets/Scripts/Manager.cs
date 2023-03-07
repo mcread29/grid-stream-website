@@ -25,6 +25,7 @@ public class Manager : MonoBehaviour
 {
     [SerializeField] private Menu m_menu;
     [SerializeField] private GameObject m_grid;
+    [SerializeField] private GameObject m_images;
     [SerializeField] private Overlay m_overlay;
 
     private SocketIOClient io;
@@ -95,6 +96,11 @@ public class Manager : MonoBehaviour
         m_overlay.AddImage(data.startRow, data.startCol, data.url, data.endRow, data.endCol);
     }
 
+    public void ClearImages()
+    {
+        m_overlay.ClearImages();
+    }
+
     public void ShowUI()
     {
         m_menu.gameObject.SetActive(true);
@@ -105,6 +111,11 @@ public class Manager : MonoBehaviour
         m_grid.gameObject.SetActive(true);
     }
 
+    public void ShowImages()
+    {
+        m_images.gameObject.SetActive(true);
+    }
+
     public void HideUI()
     {
         m_menu.gameObject.SetActive(false);
@@ -113,5 +124,10 @@ public class Manager : MonoBehaviour
     public void HideGrid()
     {
         m_grid.gameObject.SetActive(false);
+    }
+
+    public void HideImages()
+    {
+        m_images.gameObject.SetActive(false);
     }
 }
