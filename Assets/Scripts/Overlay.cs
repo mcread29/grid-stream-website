@@ -95,11 +95,43 @@ public class Overlay : MonoBehaviour
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
         {
             Debug.Log(request.error);
+            Destroy(i.gameObject);
         }
         else
         {
             Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
             i.texture = texture;
         }
+    }
+
+    public void AddGif(int startRow, int startCol, string url, int endRow = -1, int endCol = -1)
+    {
+        if (endRow == -1) endRow = startRow;
+        if (endCol == -1) endCol = startCol;
+
+        GameObject o = new GameObject(url);
+        o.transform.SetParent(m_images);
+
+        RectTransform t = o.AddComponent<RectTransform>();
+        t.anchorMin = new Vector2(0, 1);
+        t.anchorMax = new Vector2(0, 1);
+        t.sizeDelta = new Vector2((endCol - startCol + 1) * spaceWidth, (endRow - startRow + 1) * spaceHeight);
+        t.anchoredPosition = new Vector2(
+            startCol * spaceWidth + spaceWidth / 2 + ((endCol - startCol) * spaceWidth) / 2,
+            -startRow * spaceHeight - spaceHeight / 2 - ((endRow - startRow) * spaceHeight) / 2
+            );
+        t.localScale = Vector3.one;
+        // t.pivot = new Vector2(0, 1);
+
+        RawImage i = o.AddComponent<RawImage>();
+        i.enabled = false;
+        UniGifImage g = o.AddComponent<UniGifImage>();
+        Canvas c = o.AddComponent<Canvas>();
+        StartCoroutine(g.SetGifFromUrlCoroutine(url));
+    }
+
+    IEnumerator DownloadGif(string url, UniGifImage g)
+    {
+        yield return null;
     }
 }

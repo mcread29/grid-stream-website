@@ -19,6 +19,7 @@ struct AddImageData
     public string url;
     public int endRow;
     public int endCol;
+    public bool isGif;
 }
 
 public class Manager : MonoBehaviour
@@ -93,7 +94,14 @@ public class Manager : MonoBehaviour
 
     private void addImage(AddImageData data)
     {
-        m_overlay.AddImage(data.startRow, data.startCol, data.url, data.endRow, data.endCol);
+        if (data.isGif)
+        {
+            m_overlay.AddGif(data.startRow, data.startCol, data.url, data.endRow, data.endCol);
+        }
+        else
+        {
+            m_overlay.AddImage(data.startRow, data.startCol, data.url, data.endRow, data.endCol);
+        }
     }
 
     public void ClearImages()
