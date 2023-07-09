@@ -54,7 +54,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_grid: {fileID: 1375782917875951034}
-  m_images: {fileID: 1871322335611648212}
+  m_imagesParent: {fileID: 1871322335611648212}
   m_gridSpacePrefab: {fileID: 1473103728394734670, guid: eb6c893ac6ac9374cb53f88f9d533913, type: 3}
 --- !u!1 &8883956667605355082
 GameObject:

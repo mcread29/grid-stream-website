@@ -4,6 +4,8 @@ using TMPro;
 
 public class GridSpace : MonoBehaviour
 {
+    private GridImage image;
+    
     string[] map = {
         "a", "b", "c",
         "d", "e", "f",
@@ -26,6 +28,6 @@ public class GridSpace : MonoBehaviour
 
     public void SetLabel(int row, int column)
     {
-        m_label.SetText(map[row].ToUpper() + "," + column.ToString());
+        m_label.SetText(map[row].ToUpper() + "\n" + column);
     }
 }

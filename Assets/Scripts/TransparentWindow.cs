@@ -139,8 +139,6 @@ public class TransparentWindow : MonoBehaviour
     {
         SetClickthrough(false);
         Manager.Instance.ShowUI();
-        // m_menu.gameObject.SetActive(true);
-        // m_grid.gameObject.SetActive(true);
     }
 
     public void Hide()

@@ -31,11 +31,14 @@ public class Manager : MonoBehaviour
 
     private SocketIOClient io;
 
-    private static Manager m_instance;
-    public static Manager Instance { get { return m_instance; } }
+    public static Manager Instance
+    {
+        get;
+        private set;
+    }
 
-    public static string Password { get { return m_instance.password; } }
-    public static string Username { get { return m_instance.username; } }
+    public static string Password => Instance.password;
+    public static string Username => Instance.username;
 
     private int rows;
     private int cols;
@@ -44,14 +47,16 @@ public class Manager : MonoBehaviour
     private string username;
     private string password;
 
+    private GridImageSave[] savedImages;
+
     private void Awake()
     {
-        if (m_instance != null)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
         }
-        m_instance = this;
+        Instance = this;
     }
 
     private void Start()
@@ -71,13 +76,15 @@ public class Manager : MonoBehaviour
 #endif
     }
 
-    public void TryCreateOverlay(int rows, int cols, IntPtr handle, string username, string password)
+    public void TryCreateOverlay(int rows, int cols, IntPtr handle, string username, string password, GridImageSave[] imageSaves = null)
     {
         this.rows = rows;
         this.cols = cols;
         this.handle = handle;
         this.username = username;
         this.password = password;
+
+        this.savedImages = imageSaves;
 
         io.D.Emit<StartAppData>("StartApp", new StartAppData()
         {
@@ -88,7 +95,7 @@ public class Manager : MonoBehaviour
 
     private void createOverlay()
     {
-        m_overlay.Create(rows, cols, handle);
+        m_overlay.Create(rows, cols, handle, savedImages);
         m_menu.ShowOverlayActive();
     }
 
@@ -137,5 +144,13 @@ public class Manager : MonoBehaviour
     public void HideImages()
     {
         m_images.gameObject.SetActive(false);
+    }
+
+    public OverlaySaveData GetOverlayData()
+    {
+        OverlaySaveData data = m_overlay.GetSaveData();
+        data.username = username;
+        data.password = password;
+        return data;
     }
 }
